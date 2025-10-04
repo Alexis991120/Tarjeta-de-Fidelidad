@@ -36,7 +36,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .-badge {
+        .admin-badge {
             background: rgba(255,255,255,0.2);
             padding: 5px 15px;
             border-radius: 20px;
@@ -443,7 +443,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>📱 Panel de istración</h1>
+            <h1>📱 Panel de Administración</h1>
             <p>Sistema de Tarjetas de Fidelidad</p>
             <span class="admin-badge">👤 Administrador</span>
         </header>
@@ -570,7 +570,7 @@
             }
 
             const id = generateId();
-            const clientUrl = window.location.origin + window.location.pathname.replace('index.html', 'tarjeta.html') + '?id=' + id;
+            const clientUrl = window.location.origin + window.location.pathname.replace('admin.html', 'tarjeta.html') + '?id=' + id;
 
             clients[id] = {
                 id: id,
