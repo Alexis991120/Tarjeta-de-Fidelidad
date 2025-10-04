@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Tarjeta de Fidelidad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card-wrapper {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .client-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .client-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .client-phone {
+            opacity: 0.9;
+            font-size: 1em;
+        }
+
+        .progress-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: conic-gradient(#667eea var(--progress), #e0e0e0 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-inner {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress-total {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .stamps-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stamps-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .stamps-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .stamp {
+            aspect-ratio: 1;
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .stamp.filled {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            animation: fillStamp 0.4s ease-out;
+        }
+
+        @keyframes fillStamp {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .stamp.filled::after {
+            content: '✓';
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stamp-number {
+            position: absolute;
+            top: 3px;
+            left: 6px;
+            font-size: 0.7em;
+            color: #999;
+        }
+
+        .stamp.filled .stamp-number {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .reward-section {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .reward-section.pending {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .reward-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .reward-section p {
+            opacity: 0.95;
+            font-size: 1em;
+        }
+
+        .reward-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .error-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .error h2 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .error p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn-refresh {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-refresh:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .last-update {
+            text-align: center;
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 15px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <h2>Cargando tu tarjeta...</h2>
+        </div>
+
+        <div id="error" class="error" style="display: none;">
+            <div class="error-icon">😕</div>
+            <h2>Tarjeta no encontrada</h2>
+            <p>No pudimos encontrar esta tarjeta de fidelidad.<br>Por favor verifica el código QR o contacta al establecimiento.</p>
+            <button class="btn-refresh" onclick="location.reload()">🔄 Reintentar</button>
+        </div>
+
+        <div id="cardContent" class="card-wrapper" style="display: none;">
+            <div class="header">
+                <div class="logo">☕</div>
+                <h1>Mi Tarjeta de Fidelidad</h1>
+                <p class="subtitle">Acumula y gana recompensas</p>
+            </div>
+
+            <div class="client-info">
+                <div class="client-name" id="clientName"></div>
+                <div class="client-phone" id="clientPhone"></div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-circle" id="progressCircle">
+                    <div class="progress-inner">
+                        <div class="progress-number" id="progressNumber">0</div>
+                        <div class="progress-total">de 10</div>
+                    </div>
+                </div>
+                <p style="color: #666; font-weight: 600;">Progreso de tu tarjeta</p>
+            </div>
+
+            <div class="stamps-container">
+                <div class="stamps-title">✨ Tus Compras</div>
+                <div class="stamps-grid" id="stampsGrid"></div>
+            </div>
+
+            <div id="rewardSection" class="reward-section pending">
+                <div class="reward-icon">🎁</div>
+                <h2>¡Sigue acumulando!</h2>
+                <p id="rewardText">Completa 10 compras y obtén una GRATIS</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalPurchases">0</div>
+                    <div class="stat-label">Compras totales</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="rewardsEarned">0</div>
+                    <div class="stat-label">Recompensas ganadas</div>
+                </div>
+            </div>
+
+            <div class="last-update">
+                Última actualización: <span id="lastUpdate"></span>
+            </div>
+
+            <div class="footer">
+                💡 Muestra esta tarjeta en cada compra para acumular puntos
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DB_KEY = 'loyalty_clients_db';
+        let clientId = null;
+        let autoRefreshInterval = null;
+
+        // Obtener ID del cliente desde URL
+        function getClientIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Cargar datos del cliente
+        function loadClientData() {
+            clientId = getClientIdFromUrl();
+
+            if (!clientId) {
+                showError();
+                return;
+            }
+
+            const data = localStorage.getItem(DB_KEY);
+            if (!data) {
+                showError();
+                return;
+            }
+
+            const clients = JSON.parse(data);
+            const client = clients[clientId];
+
+            if (!client) {
+                showError();
+                return;
+            }
+
+            displayCard(client);
+        }
+
+        // Mostrar error
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+        }
+
+        // Mostrar tarjeta
+        function displayCard(client) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('cardContent').style.display = 'block';
+
+            document.getElementById('clientName').textContent = client.name;
+            document.getElementById('clientPhone').textContent = '📱 ' + client.phone;
+
+            const filled = client.stamps.filter(s => s).length;
+            document.getElementById('progressNumber').textContent = filled;
+            
+            // Actualizar círculo de progreso
+            const progress = (filled / 10) * 100;
+            document.getElementById('progressCircle').style.setProperty('--progress', progress + '%');
+
+            // Renderizar sellos
+            const stampsGrid = document.getElementById('stampsGrid');
+            stampsGrid.innerHTML = '';
+            
+            client.stamps.forEach((isFilled, index) => {
+                const stamp = document.createElement('div');
+                stamp.className = 'stamp' + (isFilled ? ' filled' : '');
+                stamp.innerHTML = `<span class="stamp-number">${index + 1}</span>`;
+                stampsGrid.appendChild(stamp);
+            });
+
+            // Sección de recompensa
+            const rewardSection = document.getElementById('rewardSection');
+            const rewardText = document.getElementById('rewardText');
+            
+            if (filled === 10) {
+                rewardSection.className = 'reward-section';
+                rewardSection.innerHTML = `
+                    <div class="reward-icon">🎉</div>
+                    <h2>¡FELICIDADES!</h2>
+                    <p>¡Has completado tu tarjeta! Canjea tu recompensa en tu próxima visita</p>
+                `;
+                createConfetti();
+            } else {
+                rewardSection.className = 'reward-section pending';
+                const remaining = 10 - filled;
+                rewardText.textContent = `Te ${remaining === 1 ? 'falta 1 compra' : 'faltan ' + remaining + ' compras'} para tu recompensa`;
+            }
+
+            // Estadísticas
+            document.getElementById('totalPurchases').textContent = client.totalPurchases;
+            document.getElementById('rewardsEarned').textContent = client.rewardsEarned;
+
+            // Última actualización
+            const lastUpdate = new Date().toLocaleString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = lastUpdate;
+        }
+
+        // Crear confetti
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#2ecc71'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Auto-refresh cada 5 segundos
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                const data = localStorage.getItem(DB_KEY);
+                if (data) {
+                    const clients = JSON.parse(data);
+                    const client = clients[clientId];
+                    if (client) {
+                        displayCard(client);
+                    }
+                }
+            }, 5000);
+        }
+
+        // Inicializar
+        loadClientData();
+        startAutoRefresh();
+
+        // Detectar cuando la página vuelve a estar visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                loadClientData();
+            }
+        });
+    </script>
+</body>
+</html>
